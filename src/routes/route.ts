@@ -5,9 +5,10 @@ const student = new Student();
 const router = express.Router();
 
 
-router.get('/add', student.getData)
-router.post('/add', student.addStudentData)
-router.get('/list', student.viewAllRecord)
-router.put('/update/:id', student.editData)
-router.delete('/delete/:id', student.deleteRecord)
+router.get('/add', student.getData);
+router.post('/add', student.addStudentData);
+router.get('/list', student.viewAllRecord);
+router.get('/edit/:id', student.editData);
+router.post('/update/:id', student.updateData);
+router.delete('/delete/:id', student.deleteRecord);
 export default router;

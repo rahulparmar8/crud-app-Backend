@@ -10,6 +10,7 @@ const router = express_1.default.Router();
 router.get('/add', student.getData);
 router.post('/add', student.addStudentData);
 router.get('/list', student.viewAllRecord);
-router.put('/update/:id', student.editData);
+router.get('/edit/:id', student.editData);
+router.post('/update/:id', student.updateData);
 router.delete('/delete/:id', student.deleteRecord);
 exports.default = router;

@@ -1,0 +1,52 @@
+<%- include('assets/navbar') %> <%- include('assets/header') %>
+
+<div class="row" style="justify-content: center">
+  <div class="col-sm-6 mt-5">
+    <h2 class="alert alert-secondary text-center">List Of Student</h2>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Age</th>
+          <th scope="col">Fees</th>
+          <th scope="col">MobNumber</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <tr>
+            <% data.forEach((item,i)=>{ %>
+          <tr>
+          <td><%= (i+1) %></td>
+          <td><%= item.name %></td>
+          <td><%= item.email %></td>
+          <td><%= item.age %></td>
+          <td><%= item.fees %></td>
+          <td><%= item.number %></5></td>
+          <td>
+            <a href="/admin/edit/<%= item.id %>">
+              <button type="button" class="btn btn-outline-info btn-sm">
+                Edit
+              </button>
+            </a>
+          </td>
+          <td>
+            <a href="/admin/delete/<%= item.id %>">
+              <button type="button" class="btn btn-outline-danger btn-sm">
+                Delete
+              </button>
+            </a>
+          </td>
+          <% }) %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('assets/footer') %>

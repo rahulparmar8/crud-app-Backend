@@ -1,0 +1,71 @@
+<%- include('assets/navbar') %> 
+<%- include('assets/header') %>
+
+<div class="row" style="justify-content: center">
+  <div class="col-sm-6 mt-5">
+    <h2 class="alert alert-success text-center">Add New Student</h2>
+    <form method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input
+          
+          id="name"
+          name="name"
+          type="text"
+          class="form-control"
+          autocomplete="off"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="age" class="form-label">email</label>
+        <input
+          
+          id="email"
+          name="email"
+          type="text"
+          class="form-control"
+          autocomplete="off"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="age" class="form-label">Age</label>
+        <input
+        
+          id="age"
+          name="age"
+          type="text"
+          class="form-control"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="fees" class="form-label">Fees</label>
+        <input
+        
+          id="fees"
+          name="fees"
+          type="fees"
+          class="form-control"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="number" class="form-label">MobNumber</label>
+        <input
+        
+          id="number"
+          name="number"
+          type="number"
+          class="form-control"
+          autocomplete="off"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+<%- include('assets/footer') %>

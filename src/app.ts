@@ -10,7 +10,7 @@ const app = express();
 const port = 3003;
 const DATABASE_URL = "mongodb://localhost:27017/dummy";
 
-app.use(bodyParser.json()) 
+app.use(bodyParser.json())
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = dirname(__filename);
 
