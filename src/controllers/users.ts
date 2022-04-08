@@ -5,40 +5,27 @@ export default class Student {
 
   // Get All Student Data //
   getData = async (req: Request, res: Response) => {
-    const data = await StudentModel.find()
-    // const arr = {
-    //   "data":data,
-    //   "bodyData":req.body
-    // }
+    // const data = await StudentModel.find()
     //console.log(data);
-    return res.render("addstudent", data)
+    return res.render("addstudent")
   }
 
   // Create Student Data //
   addStudentData = async (req: Request, res: Response) => {
-    const { name, email, age, fees, number } = req.body;
+
     //console.log(req.body);
-
-    // if (!name || !email || !age || !fees || !number) {
-    //   return res.status(422).json({ erroe: "Field The Properly" })
-    // }
     try {
-      const result = await StudentModel.find()
-      return res.render("addstudent", {
-        bodyData: req.body,
-        data: result,
+      const { name, email, age, fees, number } = req.body;
+      //console.log(req.body);
+      const data = new StudentModel({
+        name: name,
+        email: email,
+        age: age,
+        fees: fees,
+        number: number,
       });
-
-      // const userExist = await StudentModel.findOne({ email: email })
-      // if (userExist) {
-      //   return res.status(400).json({ error: "Email already exist" })
-      // }
-      // const user = new StudentModel({ name, email, age, fees, number });
-      // await user.save();
-      // return res.render("addname",{
-      //   bodyData:req.body
-      // })
-      // return res.status(201).json({ message: "Successfully Saved :)" })
+      const result = await data.save();
+      return res.redirect('/admin/add/')
     } catch (error) {
       console.log(error);
     }
@@ -47,13 +34,10 @@ export default class Student {
   // All record list //
   viewAllRecord = async (req: Request, res: Response) => {
     try {
-      await StudentModel.find({}, function (err, user) {
-        if (err) console.log(err);
-        console.log(user);
-        return res.render("list", {
-          data: user,
-          dodyData: undefined
-        })
+      const result = await StudentModel.find({})
+      return res.render("list", {
+        data: result,
+        dodyData: undefined
       })
     } catch (error) {
       console.log(error);
@@ -64,7 +48,7 @@ export default class Student {
   editData = async (req: Request, res: Response) => {
     try {
       const result = await StudentModel.findById(req.params.id, req.body)
-      console.log(req.body);
+      // console.log(req.body);
 
       return res.render("edit", {
         data: result
@@ -77,18 +61,20 @@ export default class Student {
   updateData = async (req: Request, res: Response) => {
     try {
       const result = await StudentModel.findByIdAndUpdate(req.params.id, req.body);
-      return res.redirect("/admin/list/")
+      return res.redirect("/admin/list")
     } catch (error) {
-
+      console.log(error);
     }
   }
 
   // Delete tabel Record //
   deleteRecord = async (req: Request, res: Response) => {
     try {
+      // console.log('i m here')
       const result = await StudentModel.findByIdAndDelete(req.params.id)
-      return res.redirect("/admin/list/")
+      return res.redirect("/admin/list")
     } catch (error) {
+
       console.log(error)
     }
   }

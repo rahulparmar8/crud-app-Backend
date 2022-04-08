@@ -11,6 +11,6 @@ router.get('/add', student.getData);
 router.post('/add', student.addStudentData);
 router.get('/list', student.viewAllRecord);
 router.get('/edit/:id', student.editData);
-router.post('/update/:id', student.updateData);
-router.delete('/delete/:id', student.deleteRecord);
+router.post('/edit/:id', student.updateData);
+router.get('/delete/:id', student.deleteRecord);
 exports.default = router;
