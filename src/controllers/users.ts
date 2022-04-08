@@ -5,14 +5,12 @@ export default class Student {
 
   // Get All Student Data //
   getData = async (req: Request, res: Response) => {
-    // const data = await StudentModel.find()
     //console.log(data);
     return res.render("addstudent")
   }
 
   // Create Student Data //
   addStudentData = async (req: Request, res: Response) => {
-
     //console.log(req.body);
     try {
       const { name, email, age, fees, number } = req.body;
@@ -31,25 +29,29 @@ export default class Student {
     }
   }
 
-  // All record list //
+  // All Record List //
   viewAllRecord = async (req: Request, res: Response) => {
     try {
-      const result = await StudentModel.find({})
+      let searchKeyword = req.query.search
+      const result = await StudentModel.find(
+        searchKeyword ? { name: req.query.search } : {}
+      )
+      console.log(req.query);
       return res.render("list", {
         data: result,
-        dodyData: undefined
+        dodyData: undefined,
+        search: searchKeyword
       })
     } catch (error) {
       console.log(error);
     }
   }
 
-  // Student Data edit //
+  // Student Data Edit //
   editData = async (req: Request, res: Response) => {
     try {
       const result = await StudentModel.findById(req.params.id, req.body)
       // console.log(req.body);
-
       return res.render("edit", {
         data: result
       })
@@ -57,7 +59,7 @@ export default class Student {
       console.log(error);
     }
   }
-  //Update document
+  // Update Document //
   updateData = async (req: Request, res: Response) => {
     try {
       const result = await StudentModel.findByIdAndUpdate(req.params.id, req.body);
@@ -74,7 +76,6 @@ export default class Student {
       const result = await StudentModel.findByIdAndDelete(req.params.id)
       return res.redirect("/admin/list")
     } catch (error) {
-
       console.log(error)
     }
   }

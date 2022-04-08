@@ -17,7 +17,6 @@ class Student {
     constructor() {
         // Get All Student Data //
         this.getData = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            // const data = await StudentModel.find()
             //console.log(data);
             return res.render("addstudent");
         });
@@ -41,20 +40,23 @@ class Student {
                 console.log(error);
             }
         });
-        // All record list //
+        // All Record List //
         this.viewAllRecord = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield student_1.default.find({});
+                let searchKeyword = req.query.search;
+                const result = yield student_1.default.find(searchKeyword ? { name: req.query.search } : {});
+                console.log(req.query);
                 return res.render("list", {
                     data: result,
-                    dodyData: undefined
+                    dodyData: undefined,
+                    search: searchKeyword
                 });
             }
             catch (error) {
                 console.log(error);
             }
         });
-        // Student Data edit //
+        // Student Data Edit //
         this.editData = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield student_1.default.findById(req.params.id, req.body);
@@ -67,7 +69,7 @@ class Student {
                 console.log(error);
             }
         });
-        //Update document
+        // Update Document //
         this.updateData = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield student_1.default.findByIdAndUpdate(req.params.id, req.body);
