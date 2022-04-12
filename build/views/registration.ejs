@@ -1,0 +1,57 @@
+<%- include('assets/navbar') %> <%- include('assets/header') %>
+
+<div class="row" style="justify-content: center; border: 1px">
+  <div class="col-sm-6 mt-5">
+    <form method="post">
+      <h2 class="alert alert-secondary text-center">Sign Up</h2>
+      <div class="form-floating mb-3">
+        <input
+          name="firstname"
+          type="firstname"
+          class="form-control"
+          id="floatingInput"
+          placeholder="name"
+          autocomplete="off"
+        />
+        <label for="floatingInput">First Name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          name="lastname"
+          type="lastname"
+          class="form-control"
+          id="floatingInput"
+          placeholder="name"
+          autocomplete="off"
+        />
+        <label for="floatingInput">Last Name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          name="email"
+          type="email"
+          class="form-control"
+          id="floatingInput"
+          placeholder="name@example.com"
+          autocomplete="off"
+        />
+        <label for="floatingInput">Email</label>
+      </div>
+      <div class="form-floating">
+        <input
+          name="password"
+          type="password"
+          class="form-control"
+          id="floatingPassword"
+          placeholder="Password"
+          autocomplete="off"
+        />
+        <label for="floatingPassword">Password</label>
+      </div>
+      <br />
+      <button type="submit" class="btn btn-outline-dark">Sing Up</button>
+    </form>
+  </div>
+</div>
+
+<%- include('assets/footer') %>

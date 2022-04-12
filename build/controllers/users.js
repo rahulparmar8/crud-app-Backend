@@ -12,29 +12,68 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const express_validator_1 = require("express-validator");
 const student_1 = __importDefault(require("../models/student"));
+const express_validation_1 = require("express-validation");
 class Student {
     constructor() {
         // Get All Student Data //
         this.getData = (req, res) => __awaiter(this, void 0, void 0, function* () {
             //console.log(data);
-            return res.render("addstudent");
+            var success = false;
+            var fail = false;
+            return res.render("addstudent", {
+                bodyData: req.body,
+                success: success,
+                fail: fail
+            });
         });
         // Create Student Data //
         this.addStudentData = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            //console.log(req.body);
+            var _a;
+            const schema = express_validation_1.Joi.object()
+                .keys({
+                name: express_validation_1.Joi.string()
+                    .min(3)
+                    .max(10)
+                    .required(),
+                email: express_validation_1.Joi.string()
+                    .email()
+                    .required(),
+                age: express_validation_1.Joi.string()
+                    .required(),
+                fees: express_validation_1.Joi.number()
+                    .integer()
+                    .required(),
+                number: express_validation_1.Joi.number().messages({
+                    "string.base": `"number" should be a type of string`,
+                    "integer.empty": `"number" must contain value`,
+                    "string.pattern.base": `"number" must be 10 digit number`,
+                    "any.required": `"number" is a required field`
+                })
+                    .min(10)
+                    .max(10)
+                    .required(),
+            });
             try {
+                const validation = schema.validate(req.body);
                 const { name, email, age, fees, number } = req.body;
-                //console.log(req.body);
-                const data = new student_1.default({
-                    name: name,
-                    email: email,
-                    age: age,
-                    fees: fees,
-                    number: number,
-                });
-                const result = yield data.save();
-                return res.redirect('/admin/add/');
+                const errors = (0, express_validator_1.validationResult)(req);
+                if (validation.error) {
+                    res.status(422)
+                        .send((_a = validation.error) === null || _a === void 0 ? void 0 : _a.details[0].message);
+                }
+                else {
+                    const data = new student_1.default({
+                        name: name,
+                        email: email,
+                        age: age,
+                        fees: fees,
+                        number: number,
+                    });
+                    const result = yield data.save();
+                    return res.redirect('/admin/add/');
+                }
             }
             catch (error) {
                 console.log(error);
@@ -43,11 +82,14 @@ class Student {
         // All Record List //
         this.viewAllRecord = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
+                // const pages = 5;
+                // const page = req.params.page || 1;
                 let searchKeyword = req.query.search;
                 const result = yield student_1.default.find(searchKeyword ? { name: req.query.search } : {});
-                console.log(req.query);
+                // console.log(req.query);
                 return res.render("list", {
                     data: result,
+                    // current: page,
                     dodyData: undefined,
                     search: searchKeyword
                 });
@@ -82,7 +124,6 @@ class Student {
         // Delete tabel Record //
         this.deleteRecord = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                // console.log('i m here')
                 const result = yield student_1.default.findByIdAndDelete(req.params.id);
                 return res.redirect("/admin/list");
             }
