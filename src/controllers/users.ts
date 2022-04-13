@@ -1,20 +1,27 @@
 import express, { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import StudentModel from '../models/student'
+import SessionModel from "../models/session";
 import { Joi } from 'express-validation';
 
 export default class Student {
 
   // Get All Student Data //
   getData = async (req: Request, res: Response) => {
-    //console.log(data);
-    var success = false;
-    var fail = false;
-    return res.render("addstudent", {
-      bodyData: req.body,
-      success: success,
-      fail: fail
-    })
+    const result = await SessionModel.find({ "key": "email" })
+    // console.log(result[0]);
+    if (result[0]) {
+      var success = false;
+      var fail = false;
+      return res.render("addstudent", {
+        bodyData: req.body,
+        success: success,
+        user: result[0],
+        fail: fail
+      })
+    } else {
+      return res.redirect('/admin/login/')
+    }
   }
 
   // Create Student Data //
@@ -34,7 +41,7 @@ export default class Student {
         fees: Joi.number()
           .integer()
           .required(),
-        number: Joi.number().messages({
+        number: Joi.string().messages({
           "string.base": `"number" should be a type of string`,
           "integer.empty": `"number" must contain value`,
           "string.pattern.base": `"number" must be 10 digit number`,
@@ -71,37 +78,49 @@ export default class Student {
 
   // All Record List //
   viewAllRecord = async (req: Request, res: Response) => {
+    const result = await SessionModel.find({ "key": "email" })
+    // console.log(result[0]);
+    if (result[0]) {
+      try {
+        // const pages = 5;
+        // const page = req.params.page || 1;
+        let searchKeyword = req.query.search
+        const result = await StudentModel.find(
+          searchKeyword ? { name: req.query.search } : {}
+        )
+        // console.log(req.query);
+        return res.render("list", {
+          data: result,
+          user: result[0],
+          // current: page,
+          dodyData: undefined,
+          search: searchKeyword
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else {
+      return res.redirect('/admin/login/')
+    }
+
+  }
+
+  // Student Data Edit //
+  editData = async (req: Request, res: Response) => {
+    const result = await SessionModel.find({ "key": "email" })
     try {
-      // const pages = 5;
-      // const page = req.params.page || 1;
-      let searchKeyword = req.query.search
-      const result = await StudentModel.find(
-        searchKeyword ? { name: req.query.search } : {}
-      )
-      // console.log(req.query);
-      return res.render("list", {
-        data: result,
-        // current: page,
-        dodyData: undefined,
-        search: searchKeyword
+      const results = await StudentModel.findById(req.params.id, req.body)
+      // console.log(req.body);
+      return res.render("edit", {
+        data: results,
+        user: result[0]
       })
     } catch (error) {
       console.log(error);
     }
   }
 
-  // Student Data Edit //
-  editData = async (req: Request, res: Response) => {
-    try {
-      const result = await StudentModel.findById(req.params.id, req.body)
-      // console.log(req.body);
-      return res.render("edit", {
-        data: result
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  }
   // Update Document //
   updateData = async (req: Request, res: Response) => {
     try {

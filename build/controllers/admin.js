@@ -13,12 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = __importDefault(require("../models/users"));
+const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
 class Users {
     constructor() {
         // Users GET Datat //
         this.getUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            return res.render("registration");
+            const result = yield session_1.default.find({ "key": "email" });
+            return res.render("registration", {
+                user: result[0],
+            });
         });
         // Users Registration //
         this.registration = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -63,21 +67,37 @@ class Users {
         });
         // Login //
         this.loginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            res.render("login");
+            const result = yield session_1.default.find({ "key": "email" });
+            res.render("login", {
+                user: result[0],
+            });
         });
         this.loginPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password } = req.body;
                 const user = yield users_1.default.findOne({ email });
-                console.log(user);
+                // console.log(req.session.;
                 if (!user) {
                     return res.send("Invalid Email");
                 }
                 if (user.password !== password) {
                     return res.send("Invalid Password");
                 }
-                req.session.email = req.param('email');
+                const session = new session_1.default({
+                    key: "email",
+                    value: email
+                });
+                const result = yield session.save();
                 return res.redirect("/admin/add/");
+            }
+            catch (error) {
+            }
+        });
+        this.userLogout = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield session_1.default.find({ "key": "email" });
+            try {
+                const results = yield session_1.default.deleteMany({});
+                return res.redirect("/admin/login");
             }
             catch (error) {
             }

@@ -1,15 +1,20 @@
 import express, { Request, Response } from "express";
 import userModel from "../models/users";
+import SessionModel from "../models/session";
 import { Joi } from 'express-validation';
 export default class Users {
 
     // Users GET Datat //
     getUser = async (req: Request, res: Response) => {
-        return res.render("registration")
+        const result = await SessionModel.find({ "key": "email" })
+        return res.render("registration", {
+            user: result[0],
+        })
     }
 
     // Users Registration //
     registration = async (req: Request, res: Response) => {
+
         const schema = Joi.object()
             .keys({
                 firstname: Joi.string()
@@ -50,23 +55,41 @@ export default class Users {
 
     // Login //
     loginUser = async (req: Request, res: Response) => {
-        res.render("login")
+        const result = await SessionModel.find({ "key": "email" })
+        res.render("login", {
+            user: result[0],
+        })
     }
 
     loginPost = async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body
             const user = await userModel.findOne({ email })
-            console.log(user);
+            // console.log(req.session.;
             if (!user) {
                 return res.send("Invalid Email");
             }
             if (user.password !== password) {
                 return res.send("Invalid Password");
             }
-            req.session.email = req.param('email');
+            const session = new SessionModel({
+                key: "email",
+                value: email
+            })
+            const result = await session.save();
             return res.redirect("/admin/add/")
         } catch (error) {
         }
+    }
+
+    userLogout = async (req: Request, res: Response) => {
+        const result = await SessionModel.find({ "key": "email" })
+        try {
+            const results = await SessionModel.deleteMany({})
+            return res.redirect("/admin/login")
+        } catch (error) {
+
+        }
+
     }
 }

@@ -14,19 +14,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const student_1 = __importDefault(require("../models/student"));
+const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
 class Student {
     constructor() {
         // Get All Student Data //
         this.getData = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            //console.log(data);
-            var success = false;
-            var fail = false;
-            return res.render("addstudent", {
-                bodyData: req.body,
-                success: success,
-                fail: fail
-            });
+            const result = yield session_1.default.find({ "key": "email" });
+            // console.log(result[0]);
+            if (result[0]) {
+                var success = false;
+                var fail = false;
+                return res.render("addstudent", {
+                    bodyData: req.body,
+                    success: success,
+                    user: result[0],
+                    fail: fail
+                });
+            }
+            else {
+                return res.redirect('/admin/login/');
+            }
         });
         // Create Student Data //
         this.addStudentData = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -45,7 +53,7 @@ class Student {
                 fees: express_validation_1.Joi.number()
                     .integer()
                     .required(),
-                number: express_validation_1.Joi.number().messages({
+                number: express_validation_1.Joi.string().messages({
                     "string.base": `"number" should be a type of string`,
                     "integer.empty": `"number" must contain value`,
                     "string.pattern.base": `"number" must be 10 digit number`,
@@ -81,30 +89,40 @@ class Student {
         });
         // All Record List //
         this.viewAllRecord = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                // const pages = 5;
-                // const page = req.params.page || 1;
-                let searchKeyword = req.query.search;
-                const result = yield student_1.default.find(searchKeyword ? { name: req.query.search } : {});
-                // console.log(req.query);
-                return res.render("list", {
-                    data: result,
-                    // current: page,
-                    dodyData: undefined,
-                    search: searchKeyword
-                });
+            const result = yield session_1.default.find({ "key": "email" });
+            // console.log(result[0]);
+            if (result[0]) {
+                try {
+                    // const pages = 5;
+                    // const page = req.params.page || 1;
+                    let searchKeyword = req.query.search;
+                    const result = yield student_1.default.find(searchKeyword ? { name: req.query.search } : {});
+                    // console.log(req.query);
+                    return res.render("list", {
+                        data: result,
+                        user: result[0],
+                        // current: page,
+                        dodyData: undefined,
+                        search: searchKeyword
+                    });
+                }
+                catch (error) {
+                    console.log(error);
+                }
             }
-            catch (error) {
-                console.log(error);
+            else {
+                return res.redirect('/admin/login/');
             }
         });
         // Student Data Edit //
         this.editData = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield session_1.default.find({ "key": "email" });
             try {
-                const result = yield student_1.default.findById(req.params.id, req.body);
+                const results = yield student_1.default.findById(req.params.id, req.body);
                 // console.log(req.body);
                 return res.render("edit", {
-                    data: result
+                    data: results,
+                    user: result[0]
                 });
             }
             catch (error) {

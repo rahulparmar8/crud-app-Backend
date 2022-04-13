@@ -11,4 +11,5 @@ router.get('/login', users.loginUser);
 router.get('/signup', users.getUser);
 router.post('/signup', users.registration);
 router.post('/login', users.loginPost);
+router.get('/logout', users.userLogout);
 exports.default = router;
