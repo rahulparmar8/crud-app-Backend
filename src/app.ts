@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import path from "path";
 import App from './routes/route';
 import Admin from './routes/admin';
@@ -19,23 +19,24 @@ app.use(
 );
 
 app.use(bodyParser.json())
-// body parts middleware
+// body parts middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
-//set Template Enging
+// set Template Enging //
 app.use(express.static("views"));
 app.use(express.static(path.join(__dirname, "assets")));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+// console.log(__dirname);
 
 app.use('/admin', App)
 app.use('/admin', Admin)
 
-// Database connection
+// Database connection //
 mongoose.connect(`mongodb://localhost:27017/dummy`).then(() => {
     console.log("connected Database");
 })
 app.listen(port, () => {
     console.log(`Server is runing... ${port}`);
-})
+});

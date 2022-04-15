@@ -20,7 +20,7 @@ router.post('/add', (0, express_validator_1.check)("name", "Name is required. Pl
     .isEmpty(), (0, express_validator_1.check)("number", "Number is required. Please enter your response.")
     .not()
     .isEmpty(), student.addStudentData);
-router.get('/list', student.viewAllRecord);
+router.get('/list/:page', student.viewAllRecord);
 router.get('/edit/:id', student.editData);
 router.post('/edit/:id', student.updateData);
 router.get('/delete/:id', student.deleteRecord);

@@ -6,7 +6,6 @@ const student = new Student();
 
 const router = express.Router();
 
-
 router.get('/add', student.getData);
 router.post('/add',
     check("name", "Name is required. Please enter your response.")
@@ -25,7 +24,7 @@ router.post('/add',
         .not()
         .isEmpty(),
     student.addStudentData);
-router.get('/list', student.viewAllRecord);
+router.get('/list/:page', student.viewAllRecord);
 router.get('/edit/:id', student.editData);
 router.post('/edit/:id', student.updateData);
 router.get('/delete/:id', student.deleteRecord);

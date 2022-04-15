@@ -82,17 +82,21 @@ export default class Student {
     // console.log(result[0]);
     if (result[0]) {
       try {
-        // const pages = 5;
-        // const page = req.params.page || 1;
+        const perPage = 5;
+        const page = req.params.page || 1;
         let searchKeyword = req.query.search
         const result = await StudentModel.find(
           searchKeyword ? { name: req.query.search } : {}
         )
+          .skip(perPage * Number(page) - perPage)
+          .limit(perPage)
+        const count = await StudentModel.count(searchKeyword ? { name: req.query.search } : {})
         // console.log(req.query);
         return res.render("list", {
           data: result,
           user: result[0],
-          // current: page,
+          current: page,
+          pages: Math.ceil(count / perPage),
           dodyData: undefined,
           search: searchKeyword
         })
@@ -103,7 +107,6 @@ export default class Student {
     else {
       return res.redirect('/admin/login/')
     }
-
   }
 
   // Student Data Edit //
@@ -135,7 +138,7 @@ export default class Student {
   deleteRecord = async (req: Request, res: Response) => {
     try {
       const result = await StudentModel.findByIdAndDelete(req.params.id)
-      return res.redirect("/admin/list")
+      return res.redirect("/admin/list/1")
     } catch (error) {
       console.log(error)
     }

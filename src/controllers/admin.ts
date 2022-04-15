@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import userModel from "../models/users";
 import SessionModel from "../models/session";
 import { Joi } from 'express-validation';
+// import bcrypt from "bcrypt"
+
 export default class Users {
 
     // Users GET Datat //
@@ -14,7 +16,6 @@ export default class Users {
 
     // Users Registration //
     registration = async (req: Request, res: Response) => {
-
         const schema = Joi.object()
             .keys({
                 firstname: Joi.string()
@@ -53,7 +54,7 @@ export default class Users {
         }
     }
 
-    // Login //
+    // GET USER LOGIN //
     loginUser = async (req: Request, res: Response) => {
         const result = await SessionModel.find({ "key": "email" })
         res.render("login", {
@@ -61,6 +62,7 @@ export default class Users {
         })
     }
 
+    // USER LOGIN //
     loginPost = async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body
@@ -79,9 +81,12 @@ export default class Users {
             const result = await session.save();
             return res.redirect("/admin/add/")
         } catch (error) {
+            console.log(error);
+
         }
     }
 
+    // USER LOGOUT //
     userLogout = async (req: Request, res: Response) => {
         const result = await SessionModel.find({ "key": "email" })
         try {

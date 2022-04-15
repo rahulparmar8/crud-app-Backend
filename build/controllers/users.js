@@ -93,15 +93,19 @@ class Student {
             // console.log(result[0]);
             if (result[0]) {
                 try {
-                    // const pages = 5;
-                    // const page = req.params.page || 1;
+                    const perPage = 5;
+                    const page = req.params.page || 1;
                     let searchKeyword = req.query.search;
-                    const result = yield student_1.default.find(searchKeyword ? { name: req.query.search } : {});
+                    const result = yield student_1.default.find(searchKeyword ? { name: req.query.search } : {})
+                        .skip(perPage * Number(page) - perPage)
+                        .limit(perPage);
+                    const count = yield student_1.default.count(searchKeyword ? { name: req.query.search } : {});
                     // console.log(req.query);
                     return res.render("list", {
                         data: result,
                         user: result[0],
-                        // current: page,
+                        current: page,
+                        pages: Math.ceil(count / perPage),
                         dodyData: undefined,
                         search: searchKeyword
                     });
@@ -143,7 +147,7 @@ class Student {
         this.deleteRecord = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield student_1.default.findByIdAndDelete(req.params.id);
-                return res.redirect("/admin/list");
+                return res.redirect("/admin/list/1");
             }
             catch (error) {
                 console.log(error);

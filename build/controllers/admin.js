@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = __importDefault(require("../models/users"));
 const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
+// import bcrypt from "bcrypt"
 class Users {
     constructor() {
         // Users GET Datat //
@@ -65,13 +66,14 @@ class Users {
                 console.log(error);
             }
         });
-        // Login //
+        // GET USER LOGIN //
         this.loginUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const result = yield session_1.default.find({ "key": "email" });
             res.render("login", {
                 user: result[0],
             });
         });
+        // USER LOGIN //
         this.loginPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password } = req.body;
@@ -91,8 +93,10 @@ class Users {
                 return res.redirect("/admin/add/");
             }
             catch (error) {
+                console.log(error);
             }
         });
+        // USER LOGOUT //
         this.userLogout = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const result = yield session_1.default.find({ "key": "email" });
             try {
