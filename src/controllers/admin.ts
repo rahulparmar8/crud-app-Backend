@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import userModel from "../models/users";
 import SessionModel from "../models/session";
 import { Joi } from 'express-validation';
-// import bcrypt from "bcrypt"
 
 export default class Users {
 
@@ -82,7 +81,6 @@ export default class Users {
             return res.redirect("/admin/add/")
         } catch (error) {
             console.log(error);
-
         }
     }
 

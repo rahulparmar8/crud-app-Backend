@@ -3,6 +3,9 @@ import { validationResult } from "express-validator";
 import StudentModel from '../models/student'
 import SessionModel from "../models/session";
 import { Joi } from 'express-validation';
+import bcrypt from "bcrypt";
+import crypto from 'crypto';
+import nodemailer from "nodemailer";
 
 export default class Student {
 
@@ -67,7 +70,11 @@ export default class Student {
           age: age,
           fees: fees,
           number: number,
+          emailToken: crypto.randomBytes(64).toString('hex'),
+          emailVerification: false
         });
+        const salt = await bcrypt.genSalt(10)
+        const hashPassword = await bcrypt.hash(data.password, salt)
         const result = await data.save();
         return res.redirect('/admin/add/')
       }

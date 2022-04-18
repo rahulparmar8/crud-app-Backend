@@ -16,7 +16,7 @@
       </div>
       <% if(typeof alert !='undefined' ) { %> <% alert.forEach(function(error) {
       %> <% if(error.param=='name' ){%>
-      <div style="color: red"><%= error.msg %></div>
+      <div style="color: red"><%= error.message %></div>
       <%} })} %>
       <div class="mb-3">
         <label for="age" class="form-label">email</label>
@@ -30,7 +30,7 @@
       </div>
       <% if(typeof alert !='undefined' ) { %> <% alert.forEach(function(error) {
       %> <% if(error.param=='email' ){%>
-      <div style="color: red"><%= error.msg %></div>
+      <div style="color: red"><%= error.message %></div>
       <%} })} %>
       <div class="mb-3">
         <label for="age" class="form-label">Age</label>
@@ -38,7 +38,7 @@
       </div>
       <% if(typeof alert !='undefined' ) { %> <% alert.forEach(function(error) {
       %> <% if(error.param=='age' ){%>
-      <div style="color: red"><%= error.msg %></div>
+      <div style="color: red"><%= error.message %></div>
       <%} })} %>
       <div class="mb-3">
         <label for="fees" class="form-label">Fees</label>
@@ -52,7 +52,7 @@
       </div>
       <% if(typeof alert !='undefined' ) { %> <% alert.forEach(function(error) {
       %> <% if(error.param=='fees' ){%>
-      <div style="color: red"><%= error.msg %></div>
+      <div style="color: red"><%= error.message %></div>
       <%} })} %>
       <div class="mb-3">
         <label for="number" class="form-label">MobNumber</label>
@@ -66,7 +66,7 @@
       </div>
       <% if(typeof alert !='undefined' ) { %> <% alert.forEach(function(error) {
       %> <% if(error.param=='number' ){%>
-      <div style="color: red"><%= error.msg %></div>
+      <div style="color: red"><%= error.message %></div>
       <%} })} %>
       <button type="submit" class="btn btn-outline-primary">Submit</button>
     </form>

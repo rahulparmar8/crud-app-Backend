@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = __importDefault(require("../models/users"));
 const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
-// import bcrypt from "bcrypt"
 class Users {
     constructor() {
         // Users GET Datat //
