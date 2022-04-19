@@ -16,8 +16,6 @@ const express_validator_1 = require("express-validator");
 const student_1 = __importDefault(require("../models/student"));
 const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const crypto_1 = __importDefault(require("crypto"));
 class Student {
     constructor() {
         // Get All Student Data //
@@ -80,11 +78,7 @@ class Student {
                         age: age,
                         fees: fees,
                         number: number,
-                        emailToken: crypto_1.default.randomBytes(64).toString('hex'),
-                        emailVerification: false
                     });
-                    const salt = yield bcrypt_1.default.genSalt(10);
-                    const hashPassword = yield bcrypt_1.default.hash(data.password, salt);
                     const result = yield data.save();
                     return res.redirect('/admin/add/');
                 }
@@ -143,7 +137,7 @@ class Student {
         this.updateData = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield student_1.default.findByIdAndUpdate(req.params.id, req.body);
-                return res.redirect("/admin/list");
+                return res.redirect("/admin/list/1");
             }
             catch (error) {
                 console.log(error);

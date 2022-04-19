@@ -15,6 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = __importDefault(require("../models/users"));
 const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const crypto_1 = __importDefault(require("crypto"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// Mail Sender details //
+// var smtpTransport = nodemailer.createTransport("SMTP", {
+//     service: "Gmail",
+//     auth: {
+//         user: "rahu.p@peerbits.com",
+//         pass: "WordOnly16"
+//     },
+//     tls: {
+//         rejectUnauthorized: false
+//     }
+// });
 class Users {
     constructor() {
         // Users GET Datat //
@@ -51,11 +65,15 @@ class Users {
                         .send((_a = usersValidation.error) === null || _a === void 0 ? void 0 : _a.details[0].message);
                 }
                 else {
+                    const salt = yield bcryptjs_1.default.genSalt(10);
+                    const hashPassword = yield bcryptjs_1.default.hash(password, salt);
                     const user = new users_1.default({
                         firstname: firstname,
                         lastname: lastname,
                         email: email,
-                        password: password
+                        password: hashPassword,
+                        emailToken: crypto_1.default.randomBytes(64).toString('hex'),
+                        emailVerification: true
                     });
                     const result = yield user.save();
                     return res.redirect("/admin/login/");
@@ -72,24 +90,33 @@ class Users {
                 user: result[0],
             });
         });
-        // USER LOGIN //
+        // USER LOGIN POST //
         this.loginPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password } = req.body;
                 const user = yield users_1.default.findOne({ email });
-                // console.log(req.session.;
-                if (!user) {
-                    return res.send("Invalid Email");
+                // console.log(user);
+                if (user) {
+                    const match = yield bcryptjs_1.default.compare(password, user.password);
+                    if (match) {
+                        // Create Token //
+                        const token = this.createToken(user.id);
+                        // Store token cookie //
+                        res.cookie('access-token', token);
+                        const session = new session_1.default({
+                            key: "email",
+                            value: email
+                        });
+                        const result = yield session.save();
+                        return res.redirect("/admin/add/");
+                    }
+                    else {
+                        return res.send("Invalid Password ");
+                    }
                 }
                 if (user.password !== password) {
-                    return res.send("Invalid Password");
+                    return res.send("Invalid Email");
                 }
-                const session = new session_1.default({
-                    key: "email",
-                    value: email
-                });
-                const result = yield session.save();
-                return res.redirect("/admin/add/");
             }
             catch (error) {
                 console.log(error);
@@ -105,6 +132,9 @@ class Users {
             catch (error) {
             }
         });
+        this.createToken = (id) => {
+            return jsonwebtoken_1.default.sign({ id }, 'bewhdswcvdfehjdcdfshj');
+        };
     }
 }
 exports.default = Users;

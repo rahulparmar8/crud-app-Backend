@@ -8,7 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const studentSchema = new mongoose_1.default.Schema({
     name: { type: String },
     email: { type: String },
-    age: { type: String },
+    age: { type: Number },
     fees: { type: Number },
     number: { type: Number },
 });
