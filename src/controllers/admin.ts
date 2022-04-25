@@ -5,8 +5,8 @@ import { Joi } from 'express-validation';
 import bcryptjs from "bcryptjs";
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken'
-import cookie from 'cookie-parser';
-import nodemailer from "nodemailer";
+// import cookie from 'cookie-parser';
+// import nodemailer from "nodemailer";
 
 // Mail Sender details //
 // var smtpTransport = nodemailer.createTransport("SMTP", {
@@ -56,7 +56,6 @@ export default class Users {
                     .send(usersValidation.error?.details[0].message)
             }
             else {
-
                 const salt = await bcryptjs.genSalt(10)
                 const hashPassword = await bcryptjs.hash(password, salt)
                 const user = new userModel({
@@ -93,10 +92,9 @@ export default class Users {
                 const match = await bcryptjs.compare(password, user.password)
                 if (match) {
                     // Create Token //
-                    const token = this.createToken(user.id)
-
+                    // const token = this.createToken(user.id)
                     // Store token cookie //
-                    res.cookie('access-token', token)
+                    // res.cookie('access-token', token)
                     const session = new SessionModel({
                         key: "email",
                         value: email
@@ -126,8 +124,8 @@ export default class Users {
         }
     }
 
-    createToken = (id: any) => {
-        return jwt.sign({ id }, 'bewhdswcvdfehjdcdfshj')
-    }
+    // createToken = (id: any) => {
+    //     return jwt.sign({ id }, 'bewhdswcvdfehjdcdfshj')
+    // }
 
 }

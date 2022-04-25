@@ -10,16 +10,17 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_session_1 = __importDefault(require("express-session"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
+// import cookieParser from "cookie-parser";
 const app = (0, express_1.default)();
 const port = 3003;
 const DATABASE_URL = "mongodb://localhost:27017/dummy";
+// Session //
 app.use((0, express_session_1.default)({
     secret: "imkey",
     resave: false,
     saveUninitialized: true,
 }));
-app.use((0, cookie_parser_1.default)());
+// app.use(cookieParser())
 app.use(express_1.default.json());
 app.use(body_parser_1.default.json());
 // body parts middleware //

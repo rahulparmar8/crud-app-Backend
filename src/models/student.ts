@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// Schema
+// Schema //
 const studentSchema = new mongoose.Schema({
     name: { type: String },
     email: { type: String },
@@ -9,7 +9,7 @@ const studentSchema = new mongoose.Schema({
     number: { type: Number },
 });
 
-// Model
+// Model //
 const StudentModel = mongoose.model("student", studentSchema);
 
 export default StudentModel;

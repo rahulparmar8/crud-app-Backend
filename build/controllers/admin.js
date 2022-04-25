@@ -17,7 +17,8 @@ const session_1 = __importDefault(require("../models/session"));
 const express_validation_1 = require("express-validation");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const crypto_1 = __importDefault(require("crypto"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// import cookie from 'cookie-parser';
+// import nodemailer from "nodemailer";
 // Mail Sender details //
 // var smtpTransport = nodemailer.createTransport("SMTP", {
 //     service: "Gmail",
@@ -100,9 +101,9 @@ class Users {
                     const match = yield bcryptjs_1.default.compare(password, user.password);
                     if (match) {
                         // Create Token //
-                        const token = this.createToken(user.id);
+                        // const token = this.createToken(user.id)
                         // Store token cookie //
-                        res.cookie('access-token', token);
+                        // res.cookie('access-token', token)
                         const session = new session_1.default({
                             key: "email",
                             value: email
@@ -132,9 +133,9 @@ class Users {
             catch (error) {
             }
         });
-        this.createToken = (id) => {
-            return jsonwebtoken_1.default.sign({ id }, 'bewhdswcvdfehjdcdfshj');
-        };
+        // createToken = (id: any) => {
+        //     return jwt.sign({ id }, 'bewhdswcvdfehjdcdfshj')
+        // }
     }
 }
 exports.default = Users;

@@ -5,13 +5,13 @@ import Admin from './routes/admin';
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import session from "express-session";
-import cookie from 'cookie-parser';
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 
 const app = express();
 const port = 3003;
 const DATABASE_URL = "mongodb://localhost:27017/dummy";
 
+// Session //
 app.use(
     session({
         secret: "imkey",
@@ -20,12 +20,11 @@ app.use(
     })
 );
 
-app.use(cookieParser())
+// app.use(cookieParser())
 app.use(express.json())
 app.use(bodyParser.json())
 // body parts middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
-
 
 // set Template Enging //
 app.use(express.static("views"));

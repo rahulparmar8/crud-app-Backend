@@ -26,7 +26,6 @@ export default class Student {
   }
 
   // Create Student Data //
-
   addStudentData = async (req: Request, res: Response) => {
     const schema = Joi.object()
       .keys({
